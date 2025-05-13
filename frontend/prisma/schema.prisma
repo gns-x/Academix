@@ -1,0 +1,47 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id          String    @id @default(uuid()) @db.Uuid
+  studentCode String    @unique @map("student_code")
+  firstName   String    @map("first_name")
+  lastName    String    @map("last_name")
+  dateOfBirth DateTime  @map("date_of_birth") @db.Date
+  gradeLevel  Int       @map("grade_level")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  guardians   StudentGuardian[]
+
+  @@map("students")
+}
+
+model Guardian {
+  id        String    @id @default(uuid()) @db.Uuid
+  firstName String    @map("first_name")
+  lastName  String    @map("last_name")
+  email     String    @unique
+  phone     String
+  address   String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  students  StudentGuardian[]
+
+  @@map("guardians")
+}
+
+model StudentGuardian {
+  id         String   @id @default(uuid()) @db.Uuid
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId  String   @map("student_id") @db.Uuid
+  guardian   Guardian @relation(fields: [guardianId], references: [id], onDelete: Cascade)
+  guardianId String   @map("guardian_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@unique([studentId, guardianId])
+  @@map("student_guardians")
+}
