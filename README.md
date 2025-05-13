@@ -1,6 +1,5 @@
 # ✨ AcademiX - The Future of School Management
 
-![AcademiX Logo Placeholder](https://via.placeholder.com/150?text=AcademiX+Logo) <!-- Add your logo here -->
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](link_to_your_ci) <!-- Example badge -->
 [![License](https://img.shields.io/github/license/gns-x/academix)](LICENSE)
