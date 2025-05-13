@@ -1,9 +1,3 @@
-Okay, let's elevate this README to be truly impressive and welcoming! We'll add more descriptive language, structure it for better readability, highlight the value proposition, and make it visually appealing with emojis and better formatting.
-
-Here's a revamped version:
-
----
-
 # ✨ AcademiX - The Future of School Management
 
 ![AcademiX Logo Placeholder](https://via.placeholder.com/150?text=AcademiX+Logo) <!-- Add your logo here -->
@@ -265,7 +259,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## 👥 Authors
 
-*   **Hamza Hadioui** - *Initial Work & Project Lead* - [GitHub](https://github.com/gns-x) | [LinkedIn](link_to_your_linkedin) <!-- Add other links -->
+*   **Hamza Hadioui** - *Initial Work & Project Lead* - [GitHub](https://github.com/gns-x) 
 
 ---
 
@@ -274,6 +268,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 *   Huge thanks to the creators and maintainers of the open-source technologies used in this project (React, NestJS, Prisma, PostgreSQL, Tailwind CSS, etc.).
 *   Inspiration from existing school management solutions and community feedback.
 *   All contributors who help improve AcademiX!
-
----
-Let's build the future of school management together!
