@@ -212,12 +212,6 @@ Check our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 ---
 
-## 📝 License
-
-AcademiX is enwrapped in the MIT License. Explore the [LICENSE](LICENSE) for full transparency.
-
---- 
-
 ## 👥 Authors
 
 * **Hamza Hadioui** - Visionary Initiator - [See GitHub Journey](https://github.com/gns-x)
