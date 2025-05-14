@@ -93,19 +93,6 @@ Equip educators with the tools to thrive and spread educational brilliance. 🏆
 
 ![Teacher Empowerment](https://link.to/teachers.gif) <!-- Animation showing teacher engagement -->
 
----
-
-## 💻 Technology Stack
-
-Built on the solid rock that is the cutting-edge tech stack of today, poised for tomorrow’s challenges. ⚙️
-
-**Frontend** | **Backend** | **Database & Realtime**  
----|---|---  
-![React](https://link.to/react.icon) **React 18** | ![NestJS](https://link.to/nestjs.icon) **NestJS** | ![PostgreSQL](https://link.to/postgresql.icon) **PostgreSQL with Prisma**  
-![TypeScript](https://link.to/typescript.icon) **TypeScript** | ![Security](https://link.to/security.icon) **JWT Authentication** | ![Realtime](https://link.to/realtime.icon) **Supabase**  
-![TailwindCSS](https://link.to/tailwind.icon) **Tailwind CSS** | ![Prisma ORM](https://link.to/prisma.icon) **Prisma (ORM)** |  
-
----
 
 ## 📦 Getting Started
 
