@@ -1,6 +1,5 @@
 #  AcademiX - The Future of School Management 
 
-![AcademiX Logo](https://link.to/logo.png) <!-- Placeholder for animated logo -->
 ![Dance of the Numbers](https://link.to/numbers.gif) <!-- Placeholder for cool animated graphic -->
 
 Welcome to **AcademiX**! Where school management transforms from mundane to magical, utilizing the latest technologies to dance at your fingertips and light up the educational universe. We invite you on this whimsical journey where managing education is not just smart—it's enchanting! ✨
