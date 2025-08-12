@@ -1,16 +1,16 @@
-import { Controller, Post, Body, UseGuards, Res } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Res, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ReportsService } from './reports.service';
 import { Response } from 'express';
 
 @Controller('reports')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
   @Post('financial')
   async generateFinancialReport(
-    @Body() data: { students: Array<{ studentId: string; enrollmentIds: string[] }> },
+    @Body(ValidationPipe) data: { students: Array<{ studentId: string; enrollmentIds: string[] }> },
     @Res() res: Response,
   ) {
     const report = await this.reportsService.generateFinancialReport(data.students);

@@ -1,24 +1,28 @@
-import { BadRequestException, Controller, Get, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Post, Query, UploadedFile, UseInterceptors, UseGuards } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Readable } from 'stream';
 import { parse } from 'csv-parse';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { StudentResponseDto, FindStudentsQueryDto } from './dto/student.dto';
 
-// Add these types
 type MulterFile = {
-    fieldname: string;
-    originalname: string;
-    encoding: string;
-    mimetype: string;
-    buffer: Buffer;
-    size: number;
-  };
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
+};
 
 @Controller('students')
+@UseGuards(JwtAuthGuard)
 export class StudentsController {
-  constructor(private readonly studentsService: StudentsService, private prisma: PrismaService) {}
+  constructor(
+    private readonly studentsService: StudentsService,
+    private readonly prisma: PrismaService
+  ) {}
 
   @Get('all')
   async getStudents() {
@@ -37,12 +41,16 @@ export class StudentsController {
       throw new BadRequestException('No file uploaded');
     }
 
+    if (!file.mimetype.includes('csv')) {
+      throw new BadRequestException('Only CSV files are allowed');
+    }
+
     const records: any[] = [];
     const parser = parse({
-        delimiter: ',',
-        columns: true,
-        skip_empty_lines: true,
-        trim: true, // Trims whitespace from headers and values
+      delimiter: ',',
+      columns: true,
+      skip_empty_lines: true,
+      trim: true,
     });
 
     return new Promise((resolve, reject) => {
@@ -51,34 +59,34 @@ export class StudentsController {
       stream
         .pipe(parser)
         .on('data', (data) => {
-            try {
-                const firstName = data['First Name'];
-                const lastName = data['Last Name'];
-                console.log('firstName:', firstName);
-                console.log('lastName:', lastName);
+          try {
+            const firstName = data['First Name']?.trim();
+            const lastName = data['Last Name']?.trim();
+            
+            if (firstName && lastName) {
               records.push({
                 name: `${firstName} ${lastName}`,
-                gender: data['Gender'],
-                grade: data['Grade'],
+                gender: data['Gender']?.trim() || 'Not specified',
+                grade: data['Grade']?.trim() || '1',
                 dateOfBirth: new Date(),
-                externalCode: data['External Code'],
-                cardId: data['Code'],
-                email: `s.${(data['First Name'] || '').toLowerCase()}.${(data['Last Name'] || '').toLowerCase()}@elitelac.com`,
+                externalCode: data['External Code']?.trim() || `STU${Date.now()}`,
+                cardId: data['Code']?.trim() || `CARD${Date.now()}`,
+                email: `s.${firstName.toLowerCase()}.${lastName.toLowerCase()}@academix.edu`,
               });
-            } catch (error) {
-              console.error('Error parsing CSV row:', data, error);
             }
-          })
-
-          .on('end', async () => {
-            try {
-              const result = await this.studentsService.bulkCreate(records);
-              resolve(result);
-            } catch (error) {
-              console.error('Error during bulk create:', error);
-              reject(new BadRequestException('Failed to create students'));
-            }
-          })
+          } catch (error) {
+            console.error('Error parsing CSV row:', error);
+          }
+        })
+        .on('end', async () => {
+          try {
+            const result = await this.studentsService.bulkCreate(records);
+            resolve(result);
+          } catch (error) {
+            console.error('Error during bulk create:', error);
+            reject(new BadRequestException('Failed to create students'));
+          }
+        })
 
         .on('error', (error) => {
           reject(error);
@@ -87,7 +95,7 @@ export class StudentsController {
   }
 
   @Get('finance-data')
-  async getStudents_finance(@Query('search') search: string) {
+  async getStudentsFinance(@Query('search') search?: string) {
     return this.prisma.student.findMany({
       where: {
         OR: [
@@ -118,24 +126,25 @@ export class StudentsController {
     });
   }
 
-@Get('students-with-service-enrollments')
-async getStudentsWithServiceEnrollments(@Query('include') include?: string) {
+  @Get('students-with-service-enrollments')
+  async getStudentsWithServiceEnrollments(@Query('include') include?: string) {
     const includeServiceEnrollments = include === 'serviceEnrollments';
 
     return this.prisma.student.findMany({
-        include: {
-            parent: true,
-            ...(includeServiceEnrollments && {
-                ServiceEnrollment: {
-                    include: {
-                        service: true,
-                    },
-                },
-            }),
-        },
+      include: {
+        parent: true,
+        ...(includeServiceEnrollments && {
+          ServiceEnrollment: {
+            include: {
+              service: true,
+            },
+          },
+        }),
+      },
     });
-}
-@Get('fins')
+  }
+
+  @Get('fins')
   async findAll(@Query() query: FindStudentsQueryDto): Promise<StudentResponseDto[]> {
     return this.studentsService.findAll(query.search);
   }

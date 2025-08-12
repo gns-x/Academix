@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { students } from '../../lib/api';
 import { SearchBar } from './SearchBar';
 import { StatsGrid } from './StatsGrid';
 import { QuickActions } from './QuickActions';
@@ -90,8 +90,7 @@ export function DashboardHome() {
 
     const fetchStats = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/students/stats');
-        const data = response.data;
+        const data = await students.getStats();
         setStats(data);
       } catch (error) {
         console.error('Error fetching stats:', error);

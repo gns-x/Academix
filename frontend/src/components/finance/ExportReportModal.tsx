@@ -40,29 +40,7 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get the JWT token from localStorage
-        // const token = localStorage.getItem('jwt_token');
-
-        // if (!token) {
-        //   throw new Error('Authentication token not found');
-        // }
-
-        const response = await fetch('http://localhost:3000/students/students-with-service-enrollments?include=serviceEnrollments', {
-          headers: {
-            // 'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.status === 401) {
-          throw new Error('Session expired. Please log in again.');
-        }
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch students');
-        }
-
-        const data = await response.json();
+        const data = await students.getAll();
         setStudents(data);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to load student data. Please try again.';
@@ -112,31 +90,7 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
 
     try {
       setLoading(true);
-    //   const token = localStorage.getItem('jwt_token');
-
-    //   if (!token) {
-    //     throw new Error('Authentication token not found');
-    //   }
-
-      const response = await fetch('http://localhost:3000/reports/financial', {
-        method: 'POST',
-        headers: {
-        //   'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ students: selectedServices }),
-      });
-
-      if (response.status === 401) {
-        throw new Error('Session expired. Please log in again.');
-      }
-
-      if (!response.ok) {
-        throw new Error('Failed to generate report');
-      }
-
-      // Handle PDF response
-      const blob = await response.blob();
+      const blob = await reports.generateFinancial({ students: selectedServices });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

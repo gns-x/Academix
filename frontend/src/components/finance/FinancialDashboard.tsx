@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TrendingUp, Users, CheckCircle, Clock, ArrowUpRight, ArrowDownRight, Download, Send, FileText, CreditCard } from 'lucide-react';
+import { payments } from '../../lib/api';
 import { RecordPaymentModal } from './RecordPaymentModal';
 import { GenerateInvoiceModal } from './GenerateInvoiceModal';
 import { ExportReportModal } from './ExportReportModal';
@@ -58,39 +59,13 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
   const handleRecordPayment = async (paymentData: PaymentData) => {
     try {
       setIsSubmitting(true);
-
-      // Get the JWT token from wherever you store it (localStorage, context, etc.)
-      const token = localStorage.getItem('jwt_token');
-
-      const response = await fetch('http://localhost:3000/payments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(paymentData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to record payment');
-      }
-
-      const result = await response.json();
-
-      // Show success message
+      const result = await payments.record(paymentData);
       toast.success('Payment recorded successfully');
-
-      // Close the modal
       setShowRecordPayment(false);
-
-      // Refresh financial data if needed
-      // You might want to call a function here to refresh the dashboard data
-
       return result;
     } catch (error) {
-      console.error('Error recording payment:', error);
-      toast.error(error.message || 'Failed to record payment');
+      const message = error instanceof Error ? error.message : 'Failed to record payment';
+      toast.error(message);
       throw error;
     } finally {
       setIsSubmitting(false);
@@ -123,22 +98,7 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
 
   const handleExportReport = async (data: { students: Array<{ studentId: string; enrollmentIds: string[] }> }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      const response = await fetch('http://localhost:3000/reports/financial', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate report');
-      }
-
-      // Assuming the response is a blob
-      const blob = await response.blob();
+      const blob = await reports.generateFinancial(data);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -151,8 +111,8 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
       setShowExportReport(false);
       toast.success('Report exported successfully');
     } catch (error) {
-      console.error('Error exporting report:', error);
-      toast.error('Failed to export report');
+      const message = error instanceof Error ? error.message : 'Failed to export report';
+      toast.error(message);
     }
   };
 

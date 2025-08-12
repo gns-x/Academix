@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Search, Filter, Download, Loader2, X, Mail, Phone, GraduationCap,  User, DollarSign, Wallet, PiggyBank, BookOpen, Clock, CheckCircle2,CalendarDays, BadgeCheck } from 'lucide-react';
-import { fetchStudents } from '../../lib/api';
+import { students } from '../../lib/api';
 
 interface Student {
   id: string;
@@ -51,7 +51,7 @@ export const StudentRecords: React.FC<StudentRecordsProps> = ({
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchStudents(searchTerm);
+        const data = await students.getFinanceData(searchTerm);
         setStudents(data);
       } catch (err) {
         setError('Failed to load student records');

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { services as servicesApi } from '../lib/api';
 import { Service } from '../types';
 import { ServiceModal } from '../components/services/ServiceModal';
 import { ServiceHeader } from '../components/services/ServiceHeader';
@@ -21,8 +21,8 @@ export function Services() {
   const fetchServices = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3000/services');
-      setServices(response.data);
+      const data = await servicesApi.getAll();
+      setServices(data);
     } catch (error) {
       console.error('Failed to fetch services:', error);
     } finally {
@@ -33,7 +33,7 @@ export function Services() {
   const handleDelete = async (service: Service) => {
     if (window.confirm('Are you sure you want to delete this service?')) {
       try {
-        await axios.delete(`http://localhost:3000/services/${service.id}`);
+        await servicesApi.delete(service.id);
         fetchServices();
       } catch (error) {
         console.error('Failed to delete service:', error);
@@ -80,9 +80,9 @@ export function Services() {
             onSave={async (serviceData) => {
               try {
                 if (editingService) {
-                  await axios.patch(`http://localhost:3000/services/${editingService.id}`, serviceData);
+                  await servicesApi.update(editingService.id, serviceData);
                 } else {
-                  await axios.post('http://localhost:3000/services', serviceData);
+                  await servicesApi.create(serviceData);
                 }
                 fetchServices();
                 setShowCreateModal(false);

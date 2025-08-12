@@ -76,15 +76,15 @@ async getStats() {
       failed: 0,
       errors: [] as string[],
     };
-    for (const student of students) {
-        if (!student.name || !student.email || !student.grade || !student.dateOfBirth) {
-          results.failed++;
-          results.errors.push(`Missing required field for student: ${JSON.stringify(student)}`);
-          continue;
-        }
-      }
 
     for (const student of students) {
+      // Validate required fields
+      if (!student.name || !student.email || !student.grade) {
+        results.failed++;
+        results.errors.push(`Missing required fields for student: ${student.name || 'Unknown'}`);
+        continue;
+      }
+
       try {
         await this.prisma.student.create({
           data: student,
@@ -93,19 +93,20 @@ async getStats() {
       } catch (error) {
         results.failed++;
         results.errors.push(
-          `Failed to create student ${student.name}: ${error.message}`
+          `Failed to create student ${student.name}: ${error.message || 'Unknown error'}`
         );
       }
     }
 
     if (results.failed === students.length) {
       throw new BadRequestException('All student creations failed', {
-        description: results.errors.join('\n'),
+        description: results.errors.slice(0, 5).join('\n'), // Limit error messages
       });
     }
 
     return results;
   }
+
   async findAll(search?: string): Promise<StudentResponseDto[]> {
     const students = await this.prisma.student.findMany({
       where: search
@@ -152,19 +153,16 @@ async getStats() {
     });
 
     return students.map(student => {
-      // Calculate total amount from all active service enrollments
       const totalAmount = student.ServiceEnrollment?.reduce((sum, enrollment) => {
         return sum + (enrollment.customPrice || enrollment.service.baseCost);
       }, 0) || 0;
 
-      // Calculate total paid amount from all completed payments
       const paidAmount = student.ServiceEnrollment?.reduce((sum, enrollment) => {
         return sum + enrollment.payments.reduce((paymentSum, payment) => {
           return paymentSum + payment.amount;
         }, 0);
       }, 0) || 0;
 
-      // Calculate remaining amount
       const remainingAmount = totalAmount - paidAmount;
 
       return {
@@ -172,7 +170,7 @@ async getStats() {
         totalAmount,
         paidAmount,
         remainingAmount,
-        balance: remainingAmount, // Update balance to match remaining amount
+        balance: remainingAmount,
       };
     });
   }

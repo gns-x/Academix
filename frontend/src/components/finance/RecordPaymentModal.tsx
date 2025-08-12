@@ -77,11 +77,7 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentsResponse = await fetch('http://localhost:3000/students/students-with-service-enrollments?include=serviceEnrollments');
-        if (!studentsResponse.ok) {
-          throw new Error('Failed to fetch students');
-        }
-        const studentsData = await studentsResponse.json();
+        const studentsData = await students.getAll();
         setStudents(studentsData);
       } catch (err) {
         setError('Failed to load data. Please try again.');
@@ -95,6 +91,12 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (selectedStudents.length === 0) {
+      setError('Please select at least one student');
+      return;
+    }
+
     const totalAmount = selectedStudents.reduce((sum, selected) => {
       const student = students.find(s => s.id === selected.studentId);
       const enrollment = student?.ServiceEnrollment.find(e => e.id === selected.enrollmentId);
@@ -108,8 +110,8 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
       })),
       ...paymentData,
       amount: totalAmount,
-      timestamp: new Date().toISOString(),
     };
+    
     onSubmit(submissionData);
   };
 

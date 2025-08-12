@@ -4,77 +4,45 @@ export type ActionType = 'delete' | 'status' | 'export' | 'enroll' | 'services';
 export type ReportType = 'enrollment' | 'academic' | 'services' | 'attendance' | 'financial' | 'activities' | 'behavioral' | 'communication';
 
 export interface Student {
-    id: string;
+  id: string;
+  name: string;
+  cardId: string;
+  email: string;
+  grade: string;
+  balance: number;
+  externalCode: string;
+  dateOfBirth?: string;
+  gender?: string;
+  Section?: string;
+  photo?: string;
+  parent?: {
     name: string;
-    cardId: string;
     email: string;
-    grade: string;
-    balance: number;
-    externalCode: string;
-    dateOfBirth: string;
-    gender: string;
-    section: string;
-    photo: string;
-    parent: {
+    phone: string;
+  };
+  ServiceEnrollment?: Array<{
+    id: string;
+    service: {
       name: string;
-      email: string;
-      phone: string;
+      category: string;
     };
-    teacher: {
-      name: string;
-      email: string;
-      subject: string;
-    };
-    serviceEnrollments: Array<{
-      id: string;
-      serviceName: string;
-      startDate: string;
-      status: string;
-    }>;
-    paymentPlan: {
-      name: string;
-      amount: number;
-      frequency: string;
-      nextDueDate: string;
-    };
-    transactions: Array<{
-      id: string;
-      date: string;
-      amount: number;
-      type: string;
-      status: string;
-    }>;
-    pickupRecords: Array<{
-      id: string;
-      date: string;
-      time: string;
-      guardian: string;
-      status: string;
-    }>;
-    subscriptions: Array<{
-      id: string;
-      service: string;
-      startDate: string;
-      endDate: string;
-      status: string;
-    }>;
-  }
+  }>;
+  totalAmount?: number;
+  paidAmount?: number;
+  remainingAmount?: number;
+}
 
-  export interface Filters {
-    year: string | number | readonly string[] | undefined;
-    status: string | number | readonly string[] | undefined;
-    grade: string;
-    externalCode?: string; // Optional filter
-  }
+export interface Filters {
+  grade: string;
+  status: string;
+  year: string;
+  externalCode?: string;
+}
 
-
-  export interface SortConfig {
-    sortConfig: any;
-    [x: string]: any;
-    key: 'name' | 'grade' | 'externalCode'; // Restrict to available fields
-    direction: 'asc' | 'desc';
-  }
-
+export interface SortConfig {
+  key: keyof Student;
+  direction: 'asc' | 'desc';
+}
 
 export interface ConfirmationDialogProps {
   isOpen: boolean;

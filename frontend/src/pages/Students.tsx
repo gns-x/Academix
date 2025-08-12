@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { students as studentsApi } from '../lib/api';
 import { FileSpreadsheet, UserPlus, ChevronLeft } from 'lucide-react';
 import { ViewMode, ActionType, ReportType, Student, Filters, SortConfig } from '../types';
 import { REPORTS } from '../utils/constants';
@@ -53,8 +53,8 @@ export function Students() {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:3000/students/all');
-        setStudents(response.data);
+        const data = await studentsApi.getAll();
+        setStudents(data);
       } catch (err) {
         console.error('Failed to fetch students:', err);
         setError('Failed to fetch students. Please try again later.');

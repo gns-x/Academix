@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -11,10 +11,10 @@ const schoolImages = [
 ];
 
 interface LoginProps {
-  setIsAuthenticated: (value: boolean) => void;
+  onLogin: (email: string, password: string) => Promise<any>;
 }
 
-export function Login({ setIsAuthenticated }: LoginProps) {
+export function Login({ onLogin }: LoginProps) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -47,34 +47,12 @@ export function Login({ setIsAuthenticated }: LoginProps) {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-
-      // Store the token
-      localStorage.setItem('token', data.access_token);
-
-      // Update authentication state
-      setIsAuthenticated(true);
-
-      // Show success message
+      await onLogin(email, password);
       toast.success('Successfully logged in!');
-
-      // Redirect to dashboard
       navigate('/dashboard');
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Login failed');
+      const message = error instanceof Error ? error.message : 'Login failed';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

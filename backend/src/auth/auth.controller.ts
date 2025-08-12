@@ -1,6 +1,16 @@
-import { Controller, Post, Get, Body, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Get, Body, HttpCode, HttpStatus, UseGuards, Request, ValidationPipe } from '@nestjs/common';
+import { IsEmail, IsString, MinLength } from 'class-validator';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+
+class LoginDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  password: string;
+}
 
 @Controller('auth')
 export class AuthController {
@@ -8,7 +18,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() loginDto: { email: string; password: string }) {
+  async login(@Body(ValidationPipe) loginDto: LoginDto) {
     return this.authService.login(loginDto.email, loginDto.password);
   }
 
@@ -17,7 +27,7 @@ export class AuthController {
   async verifyToken(@Request() req) {
     return {
       valid: true,
-      user: req.user
+      user: req.user,
     };
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Search, Filter, Check, AlertCircle, Package } from 'lucide-react';
-import axios from 'axios';
+import { services as servicesApi } from '../../lib/api';
 import { Service, BillingCycle, ServiceCategory } from '../../types';
 
 interface ServiceEnrollmentModalProps {
@@ -28,8 +28,8 @@ export function ServiceEnrollmentModal({ studentIds, onClose, onSuccess }: Servi
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/services');
-      setServices(response.data.filter((service: Service) => service.isActive));
+      const data = await servicesApi.getAll();
+      setServices(data.filter((service: Service) => service.isActive));
     } catch (error) {
       setError('Failed to fetch services');
     } finally {
@@ -64,12 +64,12 @@ export function ServiceEnrollmentModal({ studentIds, onClose, onSuccess }: Servi
 
     try {
       const enrollmentPromises = selectedServices.map(serviceId =>
-        axios.post('http://localhost:3000/service-enrollments', {
+        servicesApi.enroll({
           serviceId,
           studentIds,
           billingCycle: formData.billingCycle,
           autoRenew: formData.autoRenew,
-          startDate: new Date()
+          startDate: new Date(),
         })
       );
 

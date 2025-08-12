@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, HttpStatus, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, HttpStatus, HttpException, UseGuards, ValidationPipe } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ServicesService } from './services.service';
 import { CreateServiceDto, UpdateServiceDto } from './dto/service.dto';
 
 @Controller('services')
+@UseGuards(JwtAuthGuard)
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
@@ -25,7 +27,7 @@ export class ServicesController {
   }
 
   @Post()
-  async create(@Body() createServiceDto: CreateServiceDto) {
+  async create(@Body(ValidationPipe) createServiceDto: CreateServiceDto) {
     try {
       return await this.servicesService.create(createServiceDto);
     } catch (error) {
@@ -34,7 +36,7 @@ export class ServicesController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
+  async update(@Param('id') id: string, @Body(ValidationPipe) updateServiceDto: UpdateServiceDto) {
     try {
       return await this.servicesService.update(id, updateServiceDto);
     } catch (error) {
