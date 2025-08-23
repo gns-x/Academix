@@ -100,8 +100,6 @@ export const mockFinancialData = {
     }
   ];
 
-
-
   export const mockStudents: Student[] = [
     {
       id: '1',
@@ -230,6 +228,114 @@ export const mockFinancialData = {
       lastUpdated: '2024-03-12'
     },
   ];
+
+// Mock services data
+export const mockServices = [
+  {
+    id: '1',
+    name: 'Tuition Fee',
+    description: 'Standard academic tuition for the academic year',
+    price: 12000,
+    category: 'Academic',
+    status: 'Active',
+    duration: 'Academic Year',
+    maxStudents: 1000,
+    currentEnrollments: 850
+  },
+  {
+    id: '2',
+    name: 'Transportation',
+    description: 'School bus transportation service',
+    price: 2400,
+    category: 'Transportation',
+    status: 'Active',
+    duration: 'Academic Year',
+    maxStudents: 200,
+    currentEnrollments: 180
+  },
+  {
+    id: '3',
+    name: 'Cafeteria',
+    description: 'Daily lunch and snack service',
+    price: 1800,
+    category: 'Food',
+    status: 'Active',
+    duration: 'Academic Year',
+    maxStudents: 500,
+    currentEnrollments: 420
+  },
+  {
+    id: '4',
+    name: 'Extracurricular Activities',
+    description: 'Sports, arts, and club activities',
+    price: 600,
+    category: 'Activities',
+    status: 'Active',
+    duration: 'Academic Year',
+    maxStudents: 300,
+    currentEnrollments: 250
+  },
+  {
+    id: '5',
+    name: 'Summer Camp',
+    description: 'Educational summer program',
+    price: 1500,
+    category: 'Summer',
+    status: 'Active',
+    duration: 'Summer',
+    maxStudents: 100,
+    currentEnrollments: 75
+  }
+];
+
+// Mock payments data
+export const mockPayments = [
+  {
+    id: '1',
+    studentId: 'STU001',
+    studentName: 'John Doe',
+    amount: 12000,
+    type: 'Tuition Fee',
+    method: 'Bank Transfer',
+    status: 'Completed',
+    date: '2024-03-01',
+    reference: 'TRX123456'
+  },
+  {
+    id: '2',
+    studentId: 'STU002',
+    studentName: 'Sarah Smith',
+    amount: 2400,
+    type: 'Transportation',
+    method: 'Credit Card',
+    status: 'Completed',
+    date: '2024-03-02',
+    reference: 'TRX123457'
+  },
+  {
+    id: '3',
+    studentId: 'STU003',
+    studentName: 'Ali Al-Farsi',
+    amount: 1800,
+    type: 'Cafeteria',
+    method: 'Cash',
+    status: 'Pending',
+    date: '2024-03-03',
+    reference: 'TRX123458'
+  }
+];
+
+// Mock stats data
+export const mockStats = {
+  totalStudents: 1250,
+  activeStudents: 1180,
+  newEnrollments: 45,
+  totalRevenue: 1250000,
+  outstandingPayments: 150000,
+  collectionRate: 88,
+  averageAttendance: 94,
+  topPerformingGrade: 'Grade 11'
+};
 
 
   

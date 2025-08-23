@@ -1,7 +1,8 @@
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  BASE_URL: import.meta.env.VITE_API_URL || 'https://api.example.com', // Updated for production
   TIMEOUT: 10000,
   RETRY_ATTEMPTS: 3,
+  USE_MOCK_DATA: true, // Enable mock data for Netlify deployment
 } as const;
 
 export const ENDPOINTS = {
