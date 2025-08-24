@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 const schoolImages = [
   'https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1541339907198-eedd9c632b0b?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'
 ];
@@ -59,7 +59,7 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="login-container h-screen flex overflow-hidden">
       {/* Left Panel - School Showcase */}
       <div className="hidden lg:flex lg:w-[60%] relative overflow-hidden">
         <div className="absolute inset-0">
@@ -83,7 +83,7 @@ export function Login({ onLogin }: LoginProps) {
       </div>
 
       {/* Right Panel - Login Form */}
-      <div className="w-full lg:w-[40%] relative bg-gradient-to-br from-gray-50 to-white">
+      <div className="w-full lg:w-[40%] relative bg-gradient-to-br from-gray-50 to-white overflow-y-auto">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
 
@@ -91,7 +91,7 @@ export function Login({ onLogin }: LoginProps) {
         <div className="absolute top-[-20%] right-[-20%] w-[500px] h-[500px] bg-gradient-to-br from-[#2563EB]/10 to-[#4F46E5]/10 rounded-full blur-3xl" />
         <div className="absolute bottom-[-30%] left-[-20%] w-[400px] h-[400px] bg-gradient-to-br from-[#F59E0B]/10 to-[#2563EB]/10 rounded-full blur-3xl" />
 
-        <div className="relative flex items-center justify-center min-h-screen p-8">
+        <div className="relative flex items-center justify-center min-h-screen p-8 py-12">
           <div className="w-full max-w-md space-y-8">
             {/* Logo */}
             <div className="flex items-center justify-center">

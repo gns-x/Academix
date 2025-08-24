@@ -6,6 +6,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fix scrolling and viewport issues */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+#root {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure login page takes full height */
+.login-container {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Fix any potential scrolling issues */
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure proper height calculations */
+.min-h-screen {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+}
+
+/* Fix for mobile browsers */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+}
+
 .font-orbitron {
     font-family: 'Orbitron', sans-serif;
   }
